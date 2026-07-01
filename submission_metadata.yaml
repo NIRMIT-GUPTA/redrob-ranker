@@ -1,89 +1,91 @@
 # Redrob Hackathon — Submission Metadata Template
-#
-# Copy this file to your repo root as `submission_metadata.yaml` and fill it in.
-# The fields here should match what you submit via the portal at upload time.
-# Stage 3 review uses this file to verify your portal metadata.
-
 # ============================================================================
 # Team identity
 # ============================================================================
-team_name: "your-team-name-here"  # Used in leaderboard and announcements
+team_name: "Nirmit" 
 
 primary_contact:
-  name: "Full Name"
-  email: "primary@example.com"   # Used for all organizer communication
-  phone: "+91-XXXXXXXXXX"        # Used for top-50 / top-10 outreach
+  name: "Nirmit Gupta"
+  email: "nirmitgupta007@gmail.com"  
+  phone: "+91-9958599137"       
 
 team_members:
-  - name: "Member 1 Full Name"
-    email: "member1@example.com"
-    role: "ML Engineer"          # Optional, e.g. "Team Lead", "Backend", "Data"
-  - name: "Member 2 Full Name"
-    email: "member2@example.com"
-    role: "Data Engineer"
-  # Add more members as needed; solo participants list just one member
+  - name: "Nirmit Gupta"
+    email: "nirmitgupta007@gmail.com"
+    role: "Team Lead"
 
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "https://github.com/YOUR_USERNAME/YOUR_REPO"
-# Required. Must be reachable. Private repos OK if you can grant organizer
-# access at Stage 3 (the email to add will be communicated then).
-
-sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/redrob-ranker"
-# Required. A working hosted environment where the ranker can be run on a small
-# candidate sample. See Section 10.5 of submission_spec.md for acceptable
-# platforms (HuggingFace Spaces, Streamlit Cloud, Replit, Colab, Docker, Binder).
-
+github_repo: "https://github.com/NIRMIT-GUPTA/redrob-ranker"
+sandbox_link: "https://redrob-ranker-nirmit-gupta.streamlit.app/ "
 reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
 # The single command that produces submission.csv from candidates.jsonl.
-# Should run end-to-end within 5 minutes on CPU with 16GB RAM and no network.
 
 # ============================================================================
 # Compute environment
 # ============================================================================
 compute:
-  platform: "MacBook Pro M2"                    # Or: "AWS EC2 c5.4xlarge", "Local Linux box", etc.
-  cpu_cores: 8                                  # Number of CPU cores used
-  ram_gb: 16                                    # Available RAM in GB
-  python_version: "3.11.4"                      # python --version
-  os: "macOS 14.2"                              # Or "Ubuntu 22.04 LTS", etc.
-  uses_gpu_for_inference: false                 # Must be false — see compute constraints
-  has_network_during_ranking: false             # Must be false — no API calls during ranking
-  pre_computation_required: false               # true if you pre-compute embeddings or train models offline
-  pre_computation_time_minutes: 0               # Approximate, if applicable
+  platform: "Local Windows 11 machine"
+  cpu_cores: 8                                  
+  ram_gb: 16                                    
+  python_version: "3.11.0"                      
+  os: "Windows 11"                              
+  uses_gpu_for_inference: false                 
+  has_network_during_ranking: false             
+  pre_computation_required: false
+  pre_computation_time_minutes: 0
 
 # ============================================================================
 # AI tools declaration
 # ============================================================================
-# Transparency only — declared use is NOT penalized. Be honest. Stage 5 interview
-# may verify these declarations against your code; declarations that contradict
-# your code or your interview are flagged.
 ai_tools_used:
-  - "Claude"        # e.g. for architecture discussion, code review
-  - "GitHub Copilot"  # e.g. for autocomplete
-  # Other options: "ChatGPT", "Cursor", "Gemini", "Codeium", "Other", "None"
-
+  - "Claude"        
 ai_usage_summary: |
-  Briefly describe how AI tools were used. Examples:
-  - "Used Claude for code review and architectural discussion. Used Copilot for autocomplete.
-     No candidate data was fed to any LLM."
-  - "Used ChatGPT to debug Python issues and Cursor for refactoring."
-  - "No AI tools used."
+  Claude AI was used strategically for non-core engineering tasks:
+  
+  1. PPT Visualizations & Slide Design — Claude helped structure the 
+     presentation deck layout, visual hierarchy, and infographic design 
+     for clarity (not technical content generation).
+  
+  2. Streamlit App Structure — Claude suggested UI patterns for file 
+     uploader, dataframe display, and temp file handling; I implemented 
+     and tested all code.
+  
+  3. Documentation & README — Claude helped articulate the complex scoring 
+     methodology clearly so judges can understand the algorithm without 
+     ambiguity. The algorithm itself is entirely my design.
+  
+  4. Code Review & Edge Cases — Claude reviewed rank.py and identified 
+     3 gaps (null checks, malformed data, CSV format validation). I 
+     manually implemented all fixes and tested them.
+  
+  5. Reasoning Template Phrasing — Claude suggested varied wording patterns 
+     for candidate explanations to avoid robotic repetition. I kept all 
+     template logic, variable selection, and fact extraction entirely mine.
+  
+  NO candidate data was fed to any LLM. Core algorithm (scoring weights, 
+  honeypot heuristics, ranking logic) is 100% original work.
 
 # ============================================================================
-# Approach summary (optional but recommended)
+# Approach summary
 # ============================================================================
 methodology_summary: |
-  ≤200 word summary of your approach. Strongly recommended.
 
-  Example:
-  "Rule-based ranker with explicit reasoning capture. Five scoring components
-  (skills, title+career, experience years, location, education) combined with
-  a multiplicative behavioral-signal modifier. The title component is the
-  decisive signal against keyword-stuffer traps; an endorsement-and-duration
-  trust multiplier on skills catches lazy keyword stuffing. Runtime is ~10
-  seconds for 50K candidates on CPU."
+  Deterministic, offline candidate ranker with rule-based scoring across 
+  8 weighted dimensions: career history text (25%), title/trajectory (22%), 
+  trusted skills (17%), behavioral availability (5%), experience fit (10%), 
+  product company context (9%), location/logistics (8%), and education (4%).
+  
+  Core innovation: Honeypot detection via 8 trap patterns (expert skills with 
+  0 duration, AI keyword stuffing without production work, inconsistent salary 
+  ranges, services-heavy without product evidence, etc.). Streaming JSONL parser 
+  with bounded heap (~5,000-10,000 candidates) processes 100K candidates in 
+  60-90 seconds on CPU with <50 MB memory.
+  
+  Every candidate receives a bespoke 2-sentence reasoning grounded in profile 
+  data (no LLM generation, no hallucinations). Target honeypot rate: 5-7% in 
+  top 100 (well below 10% disqualification threshold).
 
 # ============================================================================
 # Declarations
